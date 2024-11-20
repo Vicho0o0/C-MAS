@@ -1,0 +1,35 @@
+{% load static %}
+{% include 'header.html' %}
+<header class="pricing-header" style="background: url('{% static 'img/Gim_Precios.jpg' %}') no-repeat center center; background-size: cover; height: 300px;"></header>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Bienvenido de nuevo</h2>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <p>¿No tienes una cuenta? <a href="../PortalRegistro">Regístrate aquí</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

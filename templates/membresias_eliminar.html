@@ -1,0 +1,11 @@
+{% include 'header.html' %}
+<div class="container mt-5">
+    <h1>Eliminar Membresia</h1>
+    <h3>¿Desea eliminar la siguiente Membresia?:<b>{{ membresias.Nombre }}</b></h3>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="../MembresiasAdmin/" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% include 'footer.html' %}

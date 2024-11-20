@@ -1,0 +1,83 @@
+/* Estilos existentes */
+body {
+    background-color: #878787;
+    color: #333;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.card-header {
+    background-color: #4a4a8c;
+    color: #ffffff;
+}
+
+.btn-primary {
+    background-color: #4a4a8c;
+    border: none;
+}
+
+.acceso-container {
+    max-width: 600px;
+    margin: auto;
+}
+
+.acceso-card {
+    background-color: #333333;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.acceso-card .card-header {
+    background-color: #1e90ff;
+    color: #ffffff;
+    font-size: 1.5rem;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+}
+
+.acceso-input {
+    background-color: #222222;
+    color: #ffffff;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.acceso-input::placeholder {
+    color: #aaaaaa;
+}
+
+.acceso-btn {
+    width: 100%;
+    background-color: #1e90ff;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.acceso-btn:hover {
+    background-color: #4682b4;
+}
+
+.acceso-table {
+    color: #ffffff;
+    background-color: #333333;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.acceso-table th {
+    background-color: #555555; 
+    color: #ffd700;
+    text-align: left;
+    padding: 10px;
+}
+
+.acceso-table td {
+    background-color: #444444; 
+    padding: 10px;
+}

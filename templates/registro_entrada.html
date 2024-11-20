@@ -1,0 +1,55 @@
+{% load static %}
+{% include 'header.html' %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+
+<div class="container acceso-container mt-5">
+    <div class="card acceso-card">
+        <div class="card-header text-center">
+            <h2>Control de Acceso</h2>
+        </div>
+        <div class="card-body">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success mt-3">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" class="text-center">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary acceso-btn mt-3">Consultar</button>
+            </form>
+
+            {% if cliente %}
+            <div class="table-responsive mt-4">
+                <table class="table acceso-table">
+                    <thead>
+                        <tr>
+                            <th>Info</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Plan</th>
+                            <th>Hora de Ingreso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ cliente.id }}</td>
+                            <td>{{ cliente.nombre }}</td>
+                            <td>{{ cliente.apellido }}</td>
+                            <td>{{ cliente.plan }}</td>
+                            <td>{{ cliente.registroentrada_set.last.hora_entrada }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

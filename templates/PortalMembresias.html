@@ -1,0 +1,34 @@
+{% load static %}
+{% include 'header.html' %}
+      
+
+    <header class="pricing-header" style="background: url('{% static 'img/Gim_Precios.jpg' %}') no-repeat center center; background-size: cover; height: 300px;">
+        <h1 class="display-4 font-weight-bold text-white" style="background-color: #ff0077; padding: 10px 20px; border-radius: 10px;">Precios</h1>
+    </header>
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Membresías</h2>
+        <div class="row">
+            {%for mem in membresias%}
+            <div class="col-md-4" style="margin-bottom: 10px;">
+                <div class="card card-pricing">
+                    <div class="card-body text-center">
+                        
+                        <h3 class="card-title">{{mem.Nombre}}</h3>
+                        <p class="display-4">${{mem.Precio}} / Mes</p>
+                        <ul class="list-unstyled">
+                            <li>Lunes a Viernes</li>
+                            <li>Horario de {{mem.Horario1}}hrs</li>
+                            <li>Sábado: {{mem.Horario2}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+            
+        </div>
+    </div>
+
+{% include 'footer.html' %}
+    
