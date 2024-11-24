@@ -13,17 +13,24 @@
                         <form method="POST" action= "{% url 'PortalRegistro' %}">
                             {% csrf_token %}
                             <div class="form-group">
-                               {{form.nombre.label_tag}}
-                               {{form.nombre}}
-                                {% if form.nombre.errors%}
-                                    <div class ="text-danger">{{form.nombre.errors}}</div>
+                               {{form.username.label_tag}}
+                               {{form.username}}
+                                {% if form.username.errors%}
+                                    <div class ="text-danger">{{form.username.errors}}</div>
                                 {% endif %} 
                             </div>
                             <div class="form-group">
-                                {{form.apellido.label_tag}}
-                                {{form.apellido}}
-                                 {% if form.apellido.errors%}
-                                     <div class ="text-danger">{{form.apellido.errors}}</div>
+                               {{form.first_name.label_tag}}
+                               {{form.first_name}}
+                                {% if form.first_name.errors%}
+                                    <div class ="text-danger">{{form.first_name.errors}}</div>
+                                {% endif %} 
+                            </div>
+                            <div class="form-group">
+                                {{form.last_name.label_tag}}
+                                {{form.last_name}}
+                                 {% if form.last_name.errors%}
+                                     <div class ="text-danger">{{form.last_name.errors}}</div>
                                  {% endif %} 
                              </div>
                              <div class="form-group">
@@ -41,17 +48,17 @@
                                 {% endif %}   
                             </div>
                             <div class="form-group">
-                                {{ form.password.label_tag }}
-                                {{ form.password }}
-                                {% if form.password.errors %}
-                                    <div class="text-danger">{{ form.password.errors }}</div>
+                                {{ form.password1.label_tag }}
+                                {{ form.password1 }}
+                                {% if form.password1.errors %}
+                                    <div class="text-danger">{{ form.password1.errors }}</div>
                                 {% endif %}
                             </div>
                             <div class="form-group">
-                                {{ form.password.label_tag }}
-                                {{ form.password }}
-                                {% if form.password.errors %}
-                                    <div class="text-danger">{{ form.password.errors }}</div>
+                                {{ form.password2.label_tag }}
+                                {{ form.password2 }}
+                                {% if form.password2.errors %}
+                                    <div class="text-danger">{{ form.password2.errors }}</div>
                                 {% endif %}
                             </div>
                             
@@ -66,5 +73,19 @@
             </div>
         </div>
     </div>
+
+<script>
+function formatRut(input) {
+    // Eliminar cualquier caracter que no sea número
+    let value = input.value.replace(/[^\d]/g, '');
+    
+    // Si hay suficientes números, insertar el guión
+    if (value.length > 1) {
+        value = value.slice(0, -1) + '-' + value.slice(-1);
+    }
+    
+    input.value = value;
+}
+</script>
 
 {% include 'footer.html' %}

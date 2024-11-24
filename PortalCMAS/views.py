@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import *
 from django.contrib import messages
 from django.conf import settings
 from .models import Schedule, Cliente, RegistroEntrada
 from PortalCMAS.models import Clases, Membresias
 from .forms import RegistroEntradaForm, MetricasForm, ClasesForm, FormLogin, MembresiasForm, FormRegistro
+from django.contrib.auth.models import User
 
 def Index(request):
     return render(request, 'index.html')
@@ -55,39 +55,37 @@ def Actualizar_Membresia(request,id):
     return render(request,'membresias_crear.html',data)
 
 def Login(request):
-    form = FormLogin(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        nombre = form.cleaned_data['nombre']
-        password = form.cleaned_data['password']
-        user = authenticate(request, nombre=nombre, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('../index')
-        else:
-            messages.error(request,"Nombre o Contraseña incorrectos.")
+    if request.method == "POST":
+        form = FormLogin(request.POST)
+        if form.is_valid():
+            rut = form.cleaned_data['rut']
+            password = form.cleaned_data['password']
+            try:
+                user = User.objects.get(perfil__rut=rut)
+                if user.password == password:
+                    login(request, user)
+                    return redirect('../')
+                else:
+                    messages.error(request, "Contraseña incorrecta.")
+            except User.DoesNotExist:
+                messages.error(request, "RUT no encontrado.")
+    else:
+        form = FormLogin()
     return render(request, 'PortalLogin.html', {'form': form})
 
 def Registro(request):
     if request.method == "POST":
         form = FormRegistro(request.POST)
         if form.is_valid():
-            # Crear el usuario sin guardarlo aún
             user = form.save(commit=False)
-
-            # Establecer la contraseña en formato hash
-            password = form.cleaned_data.get("password")
-            if password:
-                # Encriptar la contraseña
-                user.password = make_password(password)
-            # Guardar el usuario en la base de datos
+            user.password = form.cleaned_data['password1']
             user.save()
-
-            # Enviar mensaje de éxito
-            messages.success(request, "Registro Exitoso. Puedes logear ahora.")
+            user.perfil.rut = form.cleaned_data.get('rut')
+            user.perfil.save()
+            messages.success(request, "Registro Exitoso. Puedes iniciar sesión ahora.")
             return redirect('../PortalLogin')
         else:
-            # Mostrar errores si el formulario no es válido
-            messages.error(request, "Corrige los campos señalados por favor")
+            messages.error(request, "Por favor, corrige los errores en el formulario.")
     else:
         form = FormRegistro()
 

@@ -1,4 +1,7 @@
 from django import forms
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from .models import RegistroEntrada, Metricas, Clases, Membresias, Cliente
 
 class RegistroEntradaForm(forms.Form):
@@ -43,54 +46,44 @@ class ClasesForm(forms.ModelForm):
         ]
                 
 class FormLogin(forms.Form):
-    nombre = forms.CharField(
-        label="Nombre",
+    rut = forms.CharField(
+        label="RUT",
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Ingresa tu nombre',
-            'required' : 'true'
+            'placeholder': 'Ej: 12345678-9',
+            'required': 'true'
         })
     )
-    password= forms.CharField(
+    password = forms.CharField(
         label="Contraseña",
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder' : 'Ingresa tu contraseña',
-            'required' : 'true'   
+            'placeholder': 'Ingresa tu contraseña',
+            'required': 'true'   
         })
     )
     
-class FormRegistro(forms.ModelForm):
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}),
-        label="Contraseña"
+class FormRegistro(UserCreationForm):
+    rut = forms.CharField(
+        max_length=12,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej: 12345678-9',
+            'oninput': 'formatRut(this)'
+        })
     )
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder': 'Confirmar Contraseña'}),
-        label="Confirmar Contraseña"
-    )
-
+    
     class Meta:
-        model = Cliente
-        fields = ['nombre', 'apellido', 'email', 'rut' ,'password'] 
-
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'rut', 'password1', 'password2']
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        password = cleaned_data.get("password")
-
-        if password and password and password != password:
-            raise forms.ValidationError("Las contraseñas no coinciden.")
-        return cleaned_data
-
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password = self.cleaned_data["password"]
         if commit:
             user.save()
         return user
