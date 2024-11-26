@@ -81,3 +81,10 @@ body {
     background-color: #444444; 
     padding: 10px;
 }
+
+.chart {
+    background-color: #ffffff;
+    width: 100%;
+    min-height: 400px;
+    color: #ffffff;
+}

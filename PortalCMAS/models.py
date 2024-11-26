@@ -26,9 +26,14 @@ class RegistroEntrada(models.Model):
     def __str__(self):
         return f"Entrada: {self.cliente.nombre} ({self.hora_entrada})"
 
-class Metricas(models.Model):
+class MetricasCliente(models.Model):
     altura = models.IntegerField(null=True)
     peso = models.IntegerField(null=True)
+    horas_entrenadas = models.IntegerField(null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    rut_cliente = models.CharField(max_length=12, unique=True)
+
+class MetricasTrenSuperior(models.Model):
     peso_press_banca = models.IntegerField(null=True)
     peso_press_inclinado = models.IntegerField(null=True)
     peso_fondos = models.IntegerField(null=True)
@@ -36,16 +41,22 @@ class Metricas(models.Model):
     peso_remo_polea = models.IntegerField(null=True)
     peso_remo_libre = models.IntegerField(null=True)
     peso_dominada = models.IntegerField(null=True)
-    peso_sentadilla_libre = models.IntegerField(null=True)
-    peso_sentadilla_bulgara = models.IntegerField(null=True)
-    peso_maquina_cuadriceps = models.IntegerField(null=True)
-    peso_maquina_isquiotibiales = models.IntegerField(null=True)
-    peso_gemelos = models.IntegerField(null=True)
     peso_biceps_mancuerna = models.IntegerField(null=True)
     peso_triceps_mancuerna = models.IntegerField(null=True)
     peso_elevaciones_laterales = models.IntegerField(null=True)
     peso_elevaciones_laterales_posterior = models.IntegerField(null=True)
     peso_press_militar = models.IntegerField(null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    rut_cliente = models.CharField(max_length=12, unique=True)
+
+class MetricasTrenInferior(models.Model):
+    peso_sentadilla_libre = models.IntegerField(null=True)
+    peso_sentadilla_bulgara = models.IntegerField(null=True)
+    peso_maquina_cuadriceps = models.IntegerField(null=True)
+    peso_maquina_isquiotibiales = models.IntegerField(null=True)
+    peso_gemelos = models.IntegerField(null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    rut_cliente = models.CharField(max_length=12, unique=True)
 
 class Clases(models.Model):
     Horario = models.CharField(max_length=50)
