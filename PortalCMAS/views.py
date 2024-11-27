@@ -5,10 +5,12 @@ from django.contrib import messages
 from django.conf import settings
 from .models import Schedule, Cliente, RegistroEntrada
 from PortalCMAS.models import Clases, Membresias
-from .forms import RegistroEntradaForm, MetricasForm, ClasesForm, FormLogin, MembresiasForm, FormRegistro
+from .forms import RegistroEntradaForm, MetricasClienteForm, MetricasTrenSuperiorForm, MetricasTrenInferiorForm, ClasesForm, FormLogin, MembresiasForm, FormRegistro
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import authenticate, login
+from django.http.response import JsonResponse
+from random import randrange
 
 def Index(request):
     return render(request, 'index.html')
@@ -161,16 +163,71 @@ def Login_Admin(request):
             
     return render(request, 'PortalAdministrativo.html')
 
-def Metricas_clientes(request):
-    form=MetricasForm()
+def ProgresoCliente(request):
+    return render(request, 'metricas_progreso.html')
+
+def GraficoCliente(request):
+    return render(request, 'graficos_cliente.html')
+
+def get_chart(request):
+    serie=[]
+    counter=0
+    while(counter<6):
+        serie.append(randrange(100,400))
+        counter += 1
+    chart = {
+        'xAxis': [
+            {
+                'type':"category",
+                'data': ["Lunes","Martes","Miercoles","jueves","Viernes","Sábado"]
+            }
+        ],
+        'yAxis': [
+            {
+                'type':"value",
+
+            }
+        ],
+        'series':[
+            {
+                'data':serie,
+                'type':"line"
+            }
+        ]
+        
+    }
+
+    return JsonResponse(chart)
+
+def Metricas_cliente(request):
+    form=MetricasClienteForm()
     if request.method=='POST':
-        form=MetricasForm(request.POST)
+        form=MetricasClienteForm(request.POST)
         if form.is_valid():
             form.save()
-        return Index(request)
+        return ProgresoCliente(request)
     data={'form':form,'titulo':'Agregar Medidas'}
-    return render(request,'Metricas.html',data)
+    return render(request,'metricas_cliente.html',data)
 
+def Metricas_TrenSuperior(request):
+    form=MetricasTrenSuperiorForm()
+    if request.method=='POST':
+        form=MetricasTrenSuperiorForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return ProgresoCliente(request)
+    data={'form':form,'titulo':'Agregar Medidas'}
+    return render(request,'metricas_trensuperior.html',data)
+
+def Metricas_TrenInferior(request):
+    form=MetricasTrenInferiorForm()
+    if request.method=='POST':
+        form=MetricasTrenInferiorForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return ProgresoCliente(request)
+    data={'form':form,'titulo':'Agregar Medidas'}
+    return render(request,'metricas_treninferior.html',data)
 
 def Comunidad(request):
     return render(request, 'comunidad.html')

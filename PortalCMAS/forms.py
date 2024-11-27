@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import RegistroEntrada, Metricas, Clases, Membresias, Cliente
+from .models import RegistroEntrada, MetricasCliente, MetricasTrenSuperior, MetricasTrenInferior, Clases, Membresias, Cliente
 
 class RegistroEntradaForm(forms.Form):
     rut = forms.CharField(
@@ -11,12 +11,19 @@ class RegistroEntradaForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Ej: 12345678-9'})
     )
 
-class MetricasForm(forms.ModelForm):
+class MetricasClienteForm(forms.ModelForm):
     class Meta:
-        model = Metricas
+        model = MetricasCliente
         fields = [
             'altura', 
             'peso', 
+            'horas_entrenadas',
+        ]
+
+class MetricasTrenSuperiorForm(forms.ModelForm):
+    class Meta:
+        model = MetricasTrenSuperior
+        fields = [
             'peso_press_banca', 
             'peso_press_inclinado', 
             'peso_fondos', 
@@ -24,16 +31,22 @@ class MetricasForm(forms.ModelForm):
             'peso_remo_polea', 
             'peso_remo_libre',
             'peso_dominada',
-            'peso_sentadilla_libre',
-            'peso_sentadilla_bulgara',
-            'peso_maquina_cuadriceps',
-            'peso_maquina_isquiotibiales',
-            'peso_gemelos',
             'peso_biceps_mancuerna',
             'peso_triceps_mancuerna',
             'peso_elevaciones_laterales',
             'peso_elevaciones_laterales_posterior',
             'peso_press_militar',
+        ]
+
+class MetricasTrenInferiorForm(forms.ModelForm):
+    class Meta:
+        model = MetricasTrenInferior
+        fields = [
+            'peso_sentadilla_libre',
+            'peso_sentadilla_bulgara',
+            'peso_maquina_cuadriceps',
+            'peso_maquina_isquiotibiales',
+            'peso_gemelos',
         ]
 
 class ClasesForm(forms.ModelForm):
