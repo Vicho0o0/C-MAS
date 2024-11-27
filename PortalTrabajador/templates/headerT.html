@@ -29,5 +29,15 @@
               <a class="nav-link" href="/Portal_Trabajador/Progreso_Trabajador/">Progreso Clientes</a>
           </li>
           </ul>
+          {% if request.user.is_authenticated %}
+                    Hola {{ request.user.first_name|default:request.user.username }},
+                    <form action="{% url 'logout' %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit">
+                        Logout
+                      </button>
+                    </form>
+
+                  {% endif%}
         </div>
       </nav>

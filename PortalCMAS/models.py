@@ -10,7 +10,7 @@ class Schedule(models.Model):
 class Cliente(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
-    rut = models.CharField(max_length=12, unique=True)
+    rut_usuario = models.CharField(max_length=12, unique=True)
     email = models.EmailField(null=True, blank=True, unique=True)
     plan = models.CharField(max_length=100)
     password = models.CharField(max_length=100, blank=True)

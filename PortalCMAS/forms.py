@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from PortalCMAS.models import * 
 
 class RegistroEntradaForm(forms.Form):
-    rut = forms.CharField(
+    rut_usuario = forms.CharField(
         max_length=12,
         label="RUT",
         widget=forms.TextInput(attrs={'placeholder': 'Ej: 12345678-9'})
@@ -15,8 +15,9 @@ class MetricasClienteForm(forms.ModelForm):
     class Meta:
         model = MetricasCliente
         fields = [
-            'altura', 
-            'peso', 
+            'rut_cliente',
+            'altura',
+            'peso',
             'horas_entrenadas',
         ]
 

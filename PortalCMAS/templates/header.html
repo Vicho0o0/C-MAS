@@ -36,11 +36,23 @@
             {% if request.user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="../progreso">Progreso</a>
-          </li>
-          {%endif%}
-          </ul>
-          <a class="btn btn-outline-secondary border-secondary mr-2" href="../PortalLogin/">Iniciar sesión</a>
-          <a class="btn btn-outline-dark border-dark" href="../PortalRegistro/">Registrarse</a>
-          <a class="btn btn-outline-danger border-danger ml-2" href="../PortalAdmin/">Portal Trabajador</a>
+            </li>
+            {%endif%}
+            </ul>
+            {% if request.user.is_authenticated %}
+                    Hola {{ request.user.first_name|default:request.user.username }},
+                    <form action="{% url 'logout' %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit">
+                        Logout
+                      </button>
+                    </form>
+
+            {% else %}
+                    <a class="btn btn-outline-secondary border-secondary mr-2" href="../PortalLogin/">Iniciar sesión</a>
+                    <a class="btn btn-outline-dark border-dark" href="../PortalRegistro/">Registrarse</a>
+                    <a class="btn btn-outline-danger border-danger ml-2" href="../PortalAdmin/">Portal Trabajador</a>
+            {% endif %}
+          
         </div>
       </nav>

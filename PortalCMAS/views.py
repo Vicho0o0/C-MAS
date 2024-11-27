@@ -5,8 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from .models import Schedule, Cliente, RegistroEntrada
 from PortalCMAS.models import Clases, Membresias
-from .forms import *
-
+from PortalCMAS.forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import authenticate, login
@@ -114,6 +113,26 @@ def get_chart(request):
         ]
     }
     return JsonResponse(chart)
+
+def Metricas_Cliente(request):
+    form=MetricasCliente()
+    if request.method=='POST':
+        form=MetricasClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return ProgresoCliente(request)
+    data={'form':form,'titulo':'Agregar Progreso Personal'}
+    return render(request,'metricas_cliente.html',data)
+
+def Metricas_Entreno(request):
+    form=MetricasEjerciciosCliente()
+    if request.method=='POST':
+        form=MetricasEjerciciosClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return ProgresoCliente(request)
+    data={'form':form,'titulo':'Agregar Progreso en el Entrenamiento'}
+    return render(request,'metricas_entreno.html',data)
 
 def Comunidad(request):
     return render(request, 'comunidad.html')
