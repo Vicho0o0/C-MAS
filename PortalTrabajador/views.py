@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from PortalCMAS.models import RegistroEntrada, MetricasCliente, TipoEjercicio, GrupoMuscular, Ejercicios, MetricasEjerciciosCliente, Perfil
 from PortalCMAS.models import Clases, Membresias
-from PortalCMAS.forms import ClasesForm, MembresiasForm, AgregarTipoEjercicioForm
+from PortalCMAS.forms import *
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
 from random import randrange
@@ -117,6 +117,9 @@ def Eliminar_Clase(request, id):
     
     return render(request, 'clases_eliminar.html', {'clases': clases})
 
+def Progreso_Trabajador(request):
+    return render(request, 'Progreso_Trabajador.html')
+
 def Tipo_Ejercicio(request):
     tipo_ejercicio=TipoEjercicio.objects.all()
     data={'tipo_ejercicio':tipo_ejercicio,}
@@ -133,10 +136,10 @@ def Agregar_Tipo_Ejercicio(request):
     return render(request,'tipoejercicio_save.html',data)
 
 def Actualizar_Tipo_Ejercicio(request, id):
-    clases=TipoEjercicio.objects.get(id=id)
-    form=AgregarTipoEjercicioForm(instance=clases)
+    tipo_ejercicio=TipoEjercicio.objects.get(id=id)
+    form=AgregarTipoEjercicioForm(instance=tipo_ejercicio)
     if request.method=="POST":
-        form=AgregarTipoEjercicioForm(request.POST,instance=clases)
+        form=AgregarTipoEjercicioForm(request.POST,instance=tipo_ejercicio)
         if form.is_valid():
             form.save()
         return Tipo_Ejercicio(request)
@@ -146,7 +149,7 @@ def Actualizar_Tipo_Ejercicio(request, id):
 def Delete_Tipo_Ejercicio(request, id):
     try:
         tipo_ejercicio=TipoEjercicio.objects.get(id=id)
-    except Clases.DoesNotExist:
+    except TipoEjercicio.DoesNotExist:
         return redirect('../Tipo_Ejercicio/')
 
     if request.method == 'POST':
@@ -154,6 +157,82 @@ def Delete_Tipo_Ejercicio(request, id):
         return redirect('../Tipo_Ejercicio/')
     
     return render(request, 'tipoejercicio_eliminar.html', {'tipo_ejercicio': tipo_ejercicio})
+
+def Grupo_Muscular(request):
+    grupo_muscular=GrupoMuscular.objects.all()
+    data={'grupo_muscular':grupo_muscular,}
+    return render(request, 'grupo_muscular.html',data)
+
+def Agregar_Grupo_Muscular(request):
+    form=AgregarGrupoMuscularForm()
+    if request.method=='POST':
+        form=AgregarGrupoMuscularForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return Grupo_Muscular(request)
+    data={'form':form,'titulo':'Agregar Grupo Muscular'}
+    return render(request,'grupomuscular_save.html',data)
+
+def Actualizar_Grupo_Muscular(request, id):
+    grupo_muscular=GrupoMuscular.objects.get(id=id)
+    form=AgregarTipoEjercicioForm(instance=grupo_muscular)
+    if request.method=="POST":
+        form=AgregarTipoEjercicioForm(request.POST,instance=grupo_muscular)
+        if form.is_valid():
+            form.save()
+        return Grupo_Muscular(request)
+    data={'form':form,'titulo':'Actualizar Grupo Muscular'}
+    return render(request,'grupomuscular_save.html',data)
+
+def Delete_Grupo_Muscular(request, id):
+    try:
+        grupo_muscular=GrupoMuscular.objects.get(id=id)
+    except GrupoMuscular.DoesNotExist:
+        return redirect('../Grupo_Muscular/')
+
+    if request.method == 'POST':
+        grupo_muscular.delete()
+        return redirect('../Grupo_Muscular/')
+    
+    return render(request, 'grupomuscular_delete.html', {'grupo_muscular': grupo_muscular})
+
+def Ejercicio(request):
+    ejercicios=Ejercicios.objects.all()
+    data={'ejercicios':ejercicios,}
+    return render(request, 'ejercicios.html',data)
+
+def Agregar_Ejercicio(request):
+    form=EjerciciosForm()
+    if request.method=='POST':
+        form=EjerciciosForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return Ejercicio(request)
+    data={'form':form,'titulo':'Agregar Ejercicio'}
+    return render(request,'ejercicios_save.html',data)
+
+def Actualizar_Ejercicio(request, id):
+    ejercicios=Ejercicios.objects.get(id=id)
+    form=EjerciciosForm(instance=ejercicios)
+    if request.method=="POST":
+        form=EjerciciosForm(request.POST,instance=ejercicios)
+        if form.is_valid():
+            form.save()
+        return Ejercicio(request)
+    data={'form':form,'titulo':'Actualizar ejercicio'}
+    return render(request,'ejercicios_save.html',data)
+
+def Delete_Ejercicio(request, id):
+    try:
+        ejercicios=Ejercicios.objects.get(id=id)
+    except Ejercicios.DoesNotExist:
+        return redirect('../Ejercicios/')
+
+    if request.method == 'POST':
+        ejercicios.delete()
+        return redirect('../Ejercicios/')
+    
+    return render(request, 'ejercicios_delete.html', {'grupo_muscular': ejercicios})
 
 def RegistroEntrada(request):
     mensaje = None

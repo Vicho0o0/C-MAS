@@ -1,0 +1,48 @@
+{% load static %}
+{%include 'headerT.html'%}
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Ejercicios</h2>
+        {%if ejercicios%}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Tipo Ejercicio</th>
+                    <th>Grupo Muscular</th>
+                    <th colspan="3">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tbody>
+                    {%for ejer in ejercicios%}
+                    <tr>
+                        <td>{{ejer.id}}</td>
+                        <td>{{ejer.nombre}}</td>
+                        <td>{{ejer.tipo_ejercicio}}</td>
+                        <td>{{ejer.grupo_muscular}}</td>
+                    <td>
+                        <a href="../actualizar_ejercicio/{{tipo.id}}"
+                          class='btn btn-warning'><i class="bi bi-pencil"></i>
+                       </a>
+                    </td>
+                    <td>
+                        <a href="../delete_ejercicio/{{tipo.id}}"
+                          class='btn btn-danger'><i class="bi bi-trash"></i>
+                       </a>
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+         </table>
+        {%else%}
+            <div class="alert alert-info">No Hay ejercicios registrados</div>
+        {%endif%}
+        <a href="../crear_ejercicio/" class="btn btn-success">Crear ejercicio</a>
+        <a href="../Progreso_Trabajador/" class="btn btn-secondary">Volver</a>
+    </div>
+    
+
+{%include 'footerT.html'%} 
