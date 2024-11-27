@@ -76,16 +76,11 @@
 
 <script>
 function formatRut(input) {
-    // Eliminar cualquier caracter que no sea número
     let value = input.value.replace(/[^\d]/g, '');
-    
-    // Si hay suficientes números, insertar el guión
     if (value.length > 1) {
         value = value.slice(0, -1) + '-' + value.slice(-1);
     }
-    
     input.value = value;
 }
 </script>
-
 {% include 'footer.html' %}

@@ -17,7 +17,7 @@ urlpatterns = [
     path('Contactos/', Contactos),
     path('Inscripcion/', Inscripcion),
     path('RegistroEntrada/', RegistroEntrada),
-    path('PortalAdmin/', Login_Admin),
+    path('PortalAdmin/', Login_Admin, name='login_admin'),
     path('MembresiasAdmin/', MembresiasAdmin),
     path('crear_membresia/', CrearMembresias),
     path('eliminar_membresia/<int:id>', Eliminar_Membresia),

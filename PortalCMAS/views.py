@@ -7,6 +7,8 @@ from .models import Schedule, Cliente, RegistroEntrada
 from PortalCMAS.models import Clases, Membresias
 from .forms import RegistroEntradaForm, MetricasForm, ClasesForm, FormLogin, MembresiasForm, FormRegistro
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth import authenticate, login
 
 def Index(request):
     return render(request, 'index.html')
@@ -64,7 +66,7 @@ def Login(request):
                 user = User.objects.get(perfil__rut=rut)
                 if user.password == password:
                     login(request, user)
-                    return redirect('../')
+                    return redirect('../crear_clase/')
                 else:
                     messages.error(request, "Contraseña incorrecta.")
             except User.DoesNotExist:
@@ -142,6 +144,21 @@ def Eliminar_Clase(request, id):
     return render(request, 'clases_eliminar.html', {'clases': clases})
 
 def Login_Admin(request):
+    if request.method == "POST":
+        rut = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        try:
+            user = User.objects.get(perfil__rut=rut)
+            if user.password == password and user.is_staff:
+                login(request, user)
+                messages.success(request, "Inicio de sesión exitoso.")
+                return redirect('../')
+            else:
+                messages.error(request, "Credenciales incorrectas o usuario sin permisos.")
+        except User.DoesNotExist:
+            messages.error(request, "RUT no encontrado.")
+            
     return render(request, 'PortalAdministrativo.html')
 
 def Metricas_clientes(request):
