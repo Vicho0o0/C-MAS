@@ -27,36 +27,56 @@ class RegistroEntrada(models.Model):
         return f"Entrada: {self.cliente.nombre} ({self.hora_entrada})"
 
 class MetricasCliente(models.Model):
+    rut_cliente = models.CharField(max_length=12, unique=True)
     altura = models.IntegerField(null=True)
     peso = models.IntegerField(null=True)
     horas_entrenadas = models.IntegerField(null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
-    rut_cliente = models.CharField(max_length=12, unique=True)
+    fecha_marca = models.DateTimeField(auto_now_add=True)
 
-class MetricasTrenSuperior(models.Model):
-    peso_press_banca = models.IntegerField(null=True)
-    peso_press_inclinado = models.IntegerField(null=True)
-    peso_fondos = models.IntegerField(null=True)
-    peso_jalon_al_pecho = models.IntegerField(null=True)
-    peso_remo_polea = models.IntegerField(null=True)
-    peso_remo_libre = models.IntegerField(null=True)
-    peso_dominada = models.IntegerField(null=True)
-    peso_biceps_mancuerna = models.IntegerField(null=True)
-    peso_triceps_mancuerna = models.IntegerField(null=True)
-    peso_elevaciones_laterales = models.IntegerField(null=True)
-    peso_elevaciones_laterales_posterior = models.IntegerField(null=True)
-    peso_press_militar = models.IntegerField(null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
-    rut_cliente = models.CharField(max_length=12, unique=True)
+class TipoEjercicio(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
 
-class MetricasTrenInferior(models.Model):
-    peso_sentadilla_libre = models.IntegerField(null=True)
-    peso_sentadilla_bulgara = models.IntegerField(null=True)
-    peso_maquina_cuadriceps = models.IntegerField(null=True)
-    peso_maquina_isquiotibiales = models.IntegerField(null=True)
-    peso_gemelos = models.IntegerField(null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        db_table = 'tipoejercicio'
+        verbose_name = 'TipoEjercicio'
+        verbose_name_plural = 'TipoEjercicios'
+        ordering = ['id']
+
+class GrupoMuscular(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        db_table = 'grupomuscular'
+        verbose_name = 'GrupoMuscular'
+        verbose_name_plural = 'GruposMusculares'
+        ordering = ['id']
+
+class Ejercicios(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+    tipo_ejercicio = models.ForeignKey(TipoEjercicio, on_delete=models.CASCADE)
+    grupo_muscular = models.ForeignKey(GrupoMuscular, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        db_table = 'ejercicios'
+        verbose_name = 'Ejercicios'
+        verbose_name_plural = 'Ejercicios'
+        ordering = ['id']
+
+class MetricasEjerciciosCliente(models.Model):
     rut_cliente = models.CharField(max_length=12, unique=True)
+    nombre = models.ForeignKey(Ejercicios, on_delete=models.CASCADE)
+    peso = models.IntegerField(null=True)
+    repeticiones = models.IntegerField(null=True)
+    fecha_marca = models.DateTimeField(auto_now_add=True)
 
 class Clases(models.Model):
     Horario = models.CharField(max_length=50)
