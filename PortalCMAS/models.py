@@ -19,12 +19,19 @@ class Cliente(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.apellido} ({self.rut}) {self.email}"
     
-class RegistroEntrada(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    hora_entrada = models.DateTimeField(auto_now_add=True)
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    rut = models.CharField(max_length=12, unique=True)
 
     def __str__(self):
-        return f"Entrada: {self.cliente.nombre} ({self.hora_entrada})"
+        return f"Perfil de {self.user.username}"
+
+class RegistroEntrada(models.Model):
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, null=True, blank=True)
+    hora_entrada = models.DateTimeField(auto_now_add=True)
+
+    def str(self):
+        return f"Entrada: {self.perfil.user.first_name} {self.perfil.user.last_name} ({self.hora_entrada})"
 
 class MetricasCliente(models.Model):
     rut_cliente = models.CharField(max_length=12, unique=True)
@@ -88,13 +95,6 @@ class Membresias(models.Model):
     Precio = models.IntegerField(default=0)
     Horario1 = models.CharField(max_length=50)
     Horario2 = models.CharField(max_length=50)
-
-class Perfil(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    rut = models.CharField(max_length=12, unique=True)
-
-    def __str__(self):
-        return f"Perfil de {self.user.username}"
 
 @receiver(post_save, sender=User)
 def crear_perfil_usuario(sender, instance, created, **kwargs):

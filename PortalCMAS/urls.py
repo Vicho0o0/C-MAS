@@ -5,6 +5,7 @@ urlpatterns = [
     path('Membresias/', views.MembresiasUsuarios),
     path('PortalLogin/', views.Login),
     path('PortalRegistro/', views.Registro, name="PortalRegistro"),
+    path('PortalAdmin/', views.Login_Admin, name='login_admin'),
     path('Clases_cliente/', views.Clases_cliente),
     path('Inscripcion/', views.Inscripcion),
     path('progreso/', views.ProgresoCliente),

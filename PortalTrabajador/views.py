@@ -3,14 +3,15 @@ from django.core.mail import send_mail
 from django.contrib.auth import *
 from django.contrib import messages
 from django.conf import settings
-from PortalCMAS.models import Schedule, Cliente, RegistroEntrada, MetricasCliente, TipoEjercicio, GrupoMuscular, Ejercicios, MetricasEjerciciosCliente
+from PortalCMAS.models import RegistroEntrada, MetricasCliente, TipoEjercicio, GrupoMuscular, Ejercicios, MetricasEjerciciosCliente, Perfil
 from PortalCMAS.models import Clases, Membresias
-from PortalCMAS.forms import RegistroEntradaForm, ClasesForm, FormLogin, MembresiasForm, FormRegistro, AgregarTipoEjercicioForm
+from PortalCMAS.forms import ClasesForm, MembresiasForm, AgregarTipoEjercicioForm
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
 from random import randrange
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import authenticate, login
+from django.utils.timezone import now
 
 # Create your views here.
 def IndexT(request):
@@ -154,24 +155,26 @@ def Delete_Tipo_Ejercicio(request, id):
     
     return render(request, 'tipoejercicio_eliminar.html', {'tipo_ejercicio': tipo_ejercicio})
 
-def RegistroEntrada(request): 
-    cliente = None
-    error = None
+def RegistroEntrada(request):
+    mensaje = None
 
-    if request.method == 'POST':
-        form = RegistroEntradaForm(request.POST)
-        if form.is_valid():
-            rut = form.cleaned_data['rut']
-            try:
-                cliente = Cliente.objects.get(rut=rut)
-                RegistroEntrada.objects.create(cliente=cliente, hora_entrada=now())
-                messages.success(request, f"Acceso registrado para {cliente.nombre} {cliente.apellido}.")
-                return redirect('registro_entrada')
-            except Cliente.DoesNotExist:
-                error = "El RUT ingresado no está registrado."
-        else:
-            error = "El formulario contiene datos inválidos."
-    else:
-        form = RegistroEntradaForm()
+    if request.method == "POST":
+        rut = request.POST.get("rut")
+        try:
+            perfil = Perfil.objects.get(rut=rut)
+            hoy = now().date()
+            existe_registro = RegistroEntrada.objects.filter(
+                perfil=perfil, hora_entrada__date=hoy
+            ).exists()
 
-    return render(request, 'registro_entrada.html', {'form': form, 'cliente': cliente, 'error': error})
+            if existe_registro:
+                mensaje = f"El usuario {perfil.user.first_name} {perfil.user.last_name} ya registró su entrada hoy."
+            else:
+                RegistroEntrada.objects.create(perfil=perfil, hora_entrada=now())
+                mensaje = f"Acceso registrado para {perfil.user.first_name} {perfil.user.last_name}."
+        except Perfil.DoesNotExist:
+            mensaje = "El RUT ingresado no está registrado."
+
+    registros = RegistroEntrada.objects.all().order_by("-hora_entrada")
+
+    return render(request, "registro_entrada.html", {"mensaje": mensaje, "registros": registros})

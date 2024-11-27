@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.conf import settings
 from .models import Schedule, Cliente, RegistroEntrada
 from PortalCMAS.models import Clases, Membresias
-from .forms import RegistroEntradaForm, MetricasClienteForm, ClasesForm, FormLogin, MembresiasForm, FormRegistro
+from .forms import *
+
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import authenticate, login
@@ -30,7 +31,7 @@ def Login(request):
                 user = User.objects.get(perfil__rut=rut)
                 if user.password == password:
                     login(request, user)
-                    return redirect('../crear_clase/')
+                    return redirect('../')
                 else:
                     messages.error(request, "Contraseña incorrecta.")
             except User.DoesNotExist:
@@ -113,36 +114,6 @@ def get_chart(request):
         ]
     }
     return JsonResponse(chart)
-
-#def Metricas_cliente(request):
-#    form=MetricasClienteForm()
-#    if request.method=='POST':
-#        form=MetricasClienteForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#        return ProgresoCliente(request)
-#    data={'form':form,'titulo':'Agregar Medidas'}
-#    return render(request,'metricas_cliente.html',data)
-
-#def Metricas_TrenSuperior(request):
-#    form=MetricasTrenSuperiorForm()
-#    if request.method=='POST':
-#        form=MetricasTrenSuperiorForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#        return ProgresoCliente(request)
-#    data={'form':form,'titulo':'Agregar Medidas'}
-#    return render(request,'metricas_trensuperior.html',data)
-
-#def Metricas_TrenInferior(request):
-#    form=MetricasTrenInferiorForm()
-#    if request.method=='POST':
-#        form=MetricasTrenInferiorForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#        return ProgresoCliente(request)
-#    data={'form':form,'titulo':'Agregar Medidas'}
-#    return render(request,'metricas_treninferior.html',data)
 
 def Comunidad(request):
     return render(request, 'comunidad.html')

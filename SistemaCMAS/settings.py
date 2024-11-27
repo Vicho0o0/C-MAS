@@ -16,7 +16,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'PortalCMAS',
     'PortalTrabajador',
-    'widget_tweaks',
 ]
 
 
