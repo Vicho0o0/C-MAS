@@ -155,7 +155,7 @@ def Delete_Tipo_Ejercicio(request, id):
     
     return render(request, 'tipoejercicio_eliminar.html', {'tipo_ejercicio': tipo_ejercicio})
 
-def RegistroEntrada(request):
+def registro_entrada(request):
     mensaje = None
 
     if request.method == "POST":

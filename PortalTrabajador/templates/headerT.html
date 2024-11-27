@@ -29,5 +29,20 @@
               <a class="nav-link" href="#">Progreso Clientes</a>
           </li>
           </ul>
+          {% if user.is_authenticated %}
+              <span class="navbar-text mr-2">Hola, {{ user.username }}</span>
+              <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">
+                  Cerrar sesión
+                </button>
+              </form>
+          {% endif %}
         </div>
       </nav>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
