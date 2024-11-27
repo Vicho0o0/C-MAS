@@ -1,0 +1,11 @@
+{% include 'headerT.html' %}
+<div class="container mt-5">
+    <h1>Eliminar Ejercicio</h1>
+    <h3>¿Desea eliminar el siguiente Ejercicio?:<b>{{ ejercicios.nombre }}</b></h3>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="../Ejercicios/" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% include 'footerT.html' %}
