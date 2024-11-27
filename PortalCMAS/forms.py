@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import RegistroEntrada, MetricasCliente, MetricasTrenSuperior, MetricasTrenInferior, Clases, Membresias, Cliente
+from PortalCMAS.models import * 
 
 class RegistroEntradaForm(forms.Form):
     rut = forms.CharField(
@@ -20,33 +20,37 @@ class MetricasClienteForm(forms.ModelForm):
             'horas_entrenadas',
         ]
 
-class MetricasTrenSuperiorForm(forms.ModelForm):
+class AgregarTipoEjercicioForm(forms.ModelForm):
     class Meta:
-        model = MetricasTrenSuperior
+        model = TipoEjercicio
         fields = [
-            'peso_press_banca', 
-            'peso_press_inclinado', 
-            'peso_fondos', 
-            'peso_jalon_al_pecho', 
-            'peso_remo_polea', 
-            'peso_remo_libre',
-            'peso_dominada',
-            'peso_biceps_mancuerna',
-            'peso_triceps_mancuerna',
-            'peso_elevaciones_laterales',
-            'peso_elevaciones_laterales_posterior',
-            'peso_press_militar',
+            'nombre',
         ]
 
-class MetricasTrenInferiorForm(forms.ModelForm):
+class AgregarGrupoMuscularForm(forms.ModelForm):
     class Meta:
-        model = MetricasTrenInferior
+        model = GrupoMuscular
         fields = [
-            'peso_sentadilla_libre',
-            'peso_sentadilla_bulgara',
-            'peso_maquina_cuadriceps',
-            'peso_maquina_isquiotibiales',
-            'peso_gemelos',
+            'nombre',
+        ]
+
+class EjerciciosForm(forms.ModelForm):
+    class Meta:
+        model = Ejercicios
+        fields = [
+            'nombre',
+            'tipo_ejercicio',
+            'grupo_muscular',
+        ]
+
+
+class MetricasEjerciciosClienteForm(forms.ModelForm):
+    class Meta:
+        model = MetricasEjerciciosCliente
+        fields = [
+            'nombre',
+            'peso',
+            'repeticiones',
         ]
 
 class ClasesForm(forms.ModelForm):

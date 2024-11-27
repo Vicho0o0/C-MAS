@@ -1,0 +1,11 @@
+{% include 'headerT.html' %}
+<div class="container mt-5">
+    <h1>Eliminar Tipo Ejercicio</h1>
+    <h3>¿Desea eliminar el siguiente Tipo de Ejercicio?:<b>{{ tipo_ejercicio.nombre }}</b></h3>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="../Tipo_Ejercicio/" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% include 'footerT.html' %}

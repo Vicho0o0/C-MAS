@@ -1,0 +1,53 @@
+{% load static %}
+{% include 'headerT.html' %}
+<header class="pricing-header" style="background: url('{% static 'img/Gim_Precios.jpg' %}') no-repeat center center; background-size: cover; height: 300px;"></header>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Panel Administrativo</h2>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form method="POST" action="{% url 'login_admin' %}">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="username">RUT Administrativo</label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                placeholder="Ej: 12345678-9" required oninput="formatRut(this)">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="password">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                placeholder="Ingresa tu contraseña" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Acceder como Trabajador</button>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <p>¿Eres un usuario regular? <a href="../PortalLogin">Ingresa aquí</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function formatRut(input) {
+    let value = input.value.replace(/[^0-9kK]/g, '');
+    if (value.length > 1) {
+        value = value.slice(0, -1) + '-' + value.slice(-1);
+    }
+    input.value = value;
+}
+</script>
+{% include 'footerT.html' %}
