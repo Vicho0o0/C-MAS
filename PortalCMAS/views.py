@@ -78,7 +78,7 @@ def Login_Admin(request):
             if user.password == password and user.is_staff:
                 login(request, user)
                 messages.success(request, "Inicio de sesión exitoso.")
-                return redirect('../')
+                return redirect('../Portal_Trabajador/')
             else:
                 messages.error(request, "Credenciales incorrectas o usuario sin permisos.")
         except User.DoesNotExist:

@@ -1,4 +1,9 @@
 {% load static %}
-{%include 'headerT.html'%}
+{% if request.user.is_staff == 1 %}
+    {%include 'headerT.html'%}
     <h1>Index Trabajador</h1>
+{%else%}
+    {%include 'header.html'%}
+    <h1>No tiene acceso para esta pagina</h1>
+{%endif%}
 {%include 'footerT.html'%}
