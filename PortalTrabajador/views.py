@@ -3,8 +3,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import *
 from django.contrib import messages
 from django.conf import settings
-from PortalCMAS.models import RegistroEntrada, MetricasCliente, TipoEjercicio, GrupoMuscular, Ejercicios, MetricasEjerciciosCliente, Perfil
-from PortalCMAS.models import Clases, Membresias
+from PortalCMAS.models import *
 from PortalCMAS.forms import *
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
@@ -234,7 +233,7 @@ def Delete_Ejercicio(request, id):
     
     return render(request, 'ejercicios_delete.html', {'grupo_muscular': ejercicios})
 
-def RegistroEntrada(request):
+def Registro_Entrada(request):
     mensaje = None
 
     if request.method == "POST":

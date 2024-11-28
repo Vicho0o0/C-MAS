@@ -34,9 +34,9 @@ class EjerciciosAdmin(admin.ModelAdmin):
 admin.site.register(Ejercicios, EjerciciosAdmin)
 
 class MetricasClienteAdmin(admin.ModelAdmin):
-    list_display = ('rut_cliente', 'altura', 'peso','horas_entrenadas')
+    list_display = ('rut_cliente', 'peso','horas_entrenadas')
     search_fields = ['rut_cliente']
-    readonly_fields = ('fecha_marca',)
+    readonly_fields = ('rut_cliente','fecha_marca',)
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
@@ -44,7 +44,7 @@ class MetricasClienteAdmin(admin.ModelAdmin):
 admin.site.register(MetricasCliente, MetricasClienteAdmin)
 
 class MetricasEjerciciosClienteAdmin(admin.ModelAdmin):
-    list_display = ('rut_cliente', 'nombre', 'peso', 'repeticiones')
+    list_display = ('rut_cliente', 'nombre', 'peso', 'repeticiones', 'series')
     search_fields = ['rut_cliente']
     readonly_fields = ('fecha_marca',)
     filter_horizontal = ()

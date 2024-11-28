@@ -16,10 +16,12 @@ class MetricasClienteForm(forms.ModelForm):
         model = MetricasCliente
         fields = [
             'rut_cliente',
-            'altura',
             'peso',
             'horas_entrenadas',
         ]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['rut_cliente'].widget.attrs['readonly'] = True
 
 class AgregarTipoEjercicioForm(forms.ModelForm):
     class Meta:
@@ -52,6 +54,7 @@ class MetricasEjerciciosClienteForm(forms.ModelForm):
             'nombre',
             'peso',
             'repeticiones',
+            'series',
         ]
 
 class ClasesForm(forms.ModelForm):

@@ -115,7 +115,9 @@ def get_chart(request):
     return JsonResponse(chart)
 
 def Metricas_Cliente(request):
-    form=MetricasCliente()
+    perfil = get_object_or_404(Perfil, user=request.user)
+    rut_cliente = perfil.rut
+    form = MetricasClienteForm(initial={'rut_cliente': rut_cliente})  
     if request.method=='POST':
         form=MetricasClienteForm(request.POST)
         if form.is_valid():
@@ -125,7 +127,7 @@ def Metricas_Cliente(request):
     return render(request,'metricas_cliente.html',data)
 
 def Metricas_Entreno(request):
-    form=MetricasEjerciciosCliente()
+    form=MetricasEjerciciosClienteForm()
     if request.method=='POST':
         form=MetricasEjerciciosClienteForm(request.POST)
         if form.is_valid():

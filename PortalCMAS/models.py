@@ -24,18 +24,17 @@ class Perfil(models.Model):
     rut = models.CharField(max_length=12, unique=True)
 
     def __str__(self):
-        return f"Perfil de {self.user.username}"
-
+        return f"{self.user.first_name} {self.user.last_name} - {self.rut}"
+    
 class RegistroEntrada(models.Model):
-    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, null=True, blank=True)
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='perfil_portal_trabajador')
     hora_entrada = models.DateTimeField(auto_now_add=True)
 
     def str(self):
-        return f"Entrada: {self.perfil.user.first_name} {self.perfil.user.last_name} ({self.hora_entrada})"
+        return f"Entrada: {self.perfil.user.first_name}"
 
 class MetricasCliente(models.Model):
     rut_cliente = models.CharField(max_length=12, unique=True)
-    altura = models.IntegerField(null=True)
     peso = models.IntegerField(null=True)
     horas_entrenadas = models.IntegerField(null=True)
     fecha_marca = models.DateTimeField(auto_now_add=True)
@@ -83,6 +82,7 @@ class MetricasEjerciciosCliente(models.Model):
     nombre = models.ForeignKey(Ejercicios, on_delete=models.CASCADE)
     peso = models.IntegerField(null=True)
     repeticiones = models.IntegerField(null=True)
+    series = models.IntegerField(null=True)
     fecha_marca = models.DateTimeField(auto_now_add=True)
 
 class Clases(models.Model):
