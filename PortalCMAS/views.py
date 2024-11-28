@@ -114,6 +114,16 @@ def get_chart(request):
     }
     return JsonResponse(chart)
 
+def Ver_Progreso(request):
+    metricas_ejercicios=MetricasEjerciciosCliente.objects.all()
+    perfil = get_object_or_404(Perfil, user=request.user)
+    rut_cliente = perfil.rut
+    data={
+        'rut_cliente':rut_cliente,
+        'metricas_ejercicios':metricas_ejercicios
+    }
+    return render(request, 'ver_progreso.html',data)
+
 def Metricas_Cliente(request):
     perfil = get_object_or_404(Perfil, user=request.user)
     rut_cliente = perfil.rut
@@ -127,7 +137,9 @@ def Metricas_Cliente(request):
     return render(request,'metricas_cliente.html',data)
 
 def Metricas_Entreno(request):
-    form=MetricasEjerciciosClienteForm()
+    perfil = get_object_or_404(Perfil, user=request.user)
+    rut_cliente = perfil.rut
+    form = MetricasEjerciciosClienteForm(initial={'rut_cliente': rut_cliente})  
     if request.method=='POST':
         form=MetricasEjerciciosClienteForm(request.POST)
         if form.is_valid():

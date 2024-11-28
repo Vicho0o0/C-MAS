@@ -11,6 +11,7 @@ urlpatterns = [
     path('Clases_cliente/', views.Clases_cliente),
     path('Inscripcion/', views.Inscripcion),
     path('progreso/', views.ProgresoCliente),
+    path('ver_progreso/', views.Ver_Progreso),
     path('graficos_cliente/', views.GraficoCliente, name='grafico_cliente'),
     path('graficos_cliente/get_chart/', views.get_chart, name='get_chart'),
     path('metricas_cliente/', views.Metricas_Cliente),

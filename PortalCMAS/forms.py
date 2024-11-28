@@ -51,6 +51,7 @@ class MetricasEjerciciosClienteForm(forms.ModelForm):
     class Meta:
         model = MetricasEjerciciosCliente
         fields = [
+            'rut_cliente',
             'nombre',
             'peso',
             'repeticiones',

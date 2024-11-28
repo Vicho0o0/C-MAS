@@ -3,29 +3,31 @@
 
     <div class="container mt-5">
         <h2 class="text-center mb-4">Horarios Disponibles</h2>
-        {%if clases%}
+        {%if metricas_ejercicios%}
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Horario</th>
-                    <th>Actividad</th>
-                    <th>Máquinas Disponibles</th>
-                    <th colspan="3">Acciones</th>
+                    <th>ID</th>
+                    <th>Nombre Ejercicio</th>
+                    <th>Peso</th>
+                    <th>Repeticiones</th>
+                    <th>Series</th>
                 </tr>
             </thead>
             <tbody>
-                {%for clas in clases%}
+                {%for per in metricas_ejercicios%}
                 <tr>
-                    <td>{{clas.Horario}}</td>
-                    <td>{{clas.Actividad}}</td>
-                    <td>{{clas.Maquinas_Diponibles}}</td>
-                    <td><button class="btn btn-primary">Inscribirse</button></td>
+                    <td>{{per.id}}</td>
+                    <td>{{per.nombre}}</td>
+                    <td>{{per.peso}}</td>
+                    <td>{{per.repeticiones}}</td>
+                    <td>{{per.series}}</td>
                 </tr>
                 {%endfor%}
             </tbody>
         </table>
         {%else%}
-            <div class="alert alert-info">No Hay Clases Programadas</div>
+            <div class="alert alert-info">No Hay Registros</div>
         {%endif%}
     </div>
 
