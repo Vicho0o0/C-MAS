@@ -1,12 +1,11 @@
 {% include 'headerT.html' %}
-
 <div class="container mt-5">
-    <h1>Eliminar Clases</h1>
-    <h3>¿Desea eliminar la siguiente Clase?:<b>{{ clases.Actividad }}</b></h3>
+    <h1>Eliminar Grupo Muscular</h1>
+    <h3>¿Desea eliminar el siguiente Grupo Muscular?:<b>{{ grupo_muscular.nombre }}</b></h3>
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Eliminar</button>
-        <a href="../Clases_profesor/" class="btn btn-secondary">Cancelar</a>
+        <a href="../Grupo_Muscular/" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 {% include 'footerT.html' %}

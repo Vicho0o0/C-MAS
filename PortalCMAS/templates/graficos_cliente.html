@@ -1,5 +1,6 @@
 {% load static %}
 {% include 'header.html' %}
+{% if request.user.is_authenticated %}
     <div class="container">
         <div class="row my-4">
             <div class="col">
@@ -7,7 +8,7 @@
             </div>
         </div>
     </div>
-    
+{%endif%}
 </body>
 </html>
 {% include 'footer.html' %}
