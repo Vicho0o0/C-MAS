@@ -34,11 +34,14 @@ class RegistroEntrada(models.Model):
         return f"Entrada: {self.perfil.user.first_name} {self.perfil.user.last_name} ({self.hora_entrada})"
 
 class MetricasCliente(models.Model):
-    rut_cliente = models.CharField(max_length=12, unique=True)
+    rut_cliente = models.CharField(max_length=12)
     altura = models.IntegerField(null=True)
     peso = models.IntegerField(null=True)
     horas_entrenadas = models.IntegerField(null=True)
     fecha_marca = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha_marca']
 
 class TipoEjercicio(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
@@ -53,8 +56,13 @@ class TipoEjercicio(models.Model):
         ordering = ['id']
 
 class GrupoMuscular(models.Model):
-    nombre = models.CharField(max_length=50, unique=True)
-
+    REGIONES = [
+        ('superior', 'Superior'),
+        ('inferior', 'Inferior'),
+    ]
+    nombre = models.CharField(max_length=100)
+    region = models.CharField(max_length=20, choices=REGIONES, default='superior')
+    
     def __str__(self):
         return self.nombre
 
@@ -65,25 +73,24 @@ class GrupoMuscular(models.Model):
         ordering = ['id']
 
 class Ejercicios(models.Model):
-    nombre = models.CharField(max_length=50, unique=True)
+    nombre = models.CharField(max_length=100)
     tipo_ejercicio = models.ForeignKey(TipoEjercicio, on_delete=models.CASCADE)
     grupo_muscular = models.ForeignKey(GrupoMuscular, on_delete=models.CASCADE)
-
+    dificultad = models.CharField(max_length=50)
+    descripcion = models.TextField(blank=True)
+    
     def __str__(self):
-        return self.nombre
-
-    class Meta:
-        db_table = 'ejercicios'
-        verbose_name = 'Ejercicios'
-        verbose_name_plural = 'Ejercicios'
-        ordering = ['id']
+        return f"{self.nombre} - {self.tipo_ejercicio.nombre}"
 
 class MetricasEjerciciosCliente(models.Model):
-    rut_cliente = models.CharField(max_length=12, unique=True)
+    rut_cliente = models.CharField(max_length=12)
     nombre = models.ForeignKey(Ejercicios, on_delete=models.CASCADE)
     peso = models.IntegerField(null=True)
     repeticiones = models.IntegerField(null=True)
     fecha_marca = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha_marca']
 
 class Clases(models.Model):
     Horario = models.CharField(max_length=50)

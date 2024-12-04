@@ -26,14 +26,17 @@
                 <a class="nav-link" href="/Portal_Trabajador/Clases_profesor">Clases</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/Portal_Trabajador/Progreso_Trabajador/">Progreso Clientes</a>
-          </li>
+                <a class="nav-link" href="/Portal_Trabajador/RegistroEntrada/">Registro Entrada</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Portal_Trabajador/Progreso_Trabajador/">Progreso Clientes</a>
+            </li>
           </ul>
           {% if user.is_authenticated %}
               <span class="navbar-text mr-2">Hola, {{ user.username }}</span>
-              <form action="{% url 'logout' %}" method="post">
+              <form action="{% url 'logout' %}" method="post" class="d-inline">
                 {% csrf_token %}
-                <button type="submit">
+                <button type="submit" class="btn btn-outline-danger">
                   Cerrar sesión
                 </button>
               </form>

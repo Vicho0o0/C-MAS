@@ -14,11 +14,12 @@ class RegistroEntradaForm(forms.Form):
 class MetricasClienteForm(forms.ModelForm):
     class Meta:
         model = MetricasCliente
-        fields = [
-            'altura', 
-            'peso', 
-            'horas_entrenadas',
-        ]
+        fields = ['altura', 'peso', 'horas_entrenadas']
+        widgets = {
+            'altura': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Altura en cm'}),
+            'peso': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Peso en kg'}),
+            'horas_entrenadas': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Horas entrenadas'})
+        }
 
 class AgregarTipoEjercicioForm(forms.ModelForm):
     class Meta:
@@ -41,17 +42,20 @@ class EjerciciosForm(forms.ModelForm):
             'nombre',
             'tipo_ejercicio',
             'grupo_muscular',
+            'dificultad',
+            'descripcion'
         ]
 
 
 class MetricasEjerciciosClienteForm(forms.ModelForm):
     class Meta:
         model = MetricasEjerciciosCliente
-        fields = [
-            'nombre',
-            'peso',
-            'repeticiones',
-        ]
+        fields = ['nombre', 'peso', 'repeticiones']
+        widgets = {
+            'nombre': forms.Select(attrs={'class': 'form-control'}),
+            'peso': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Peso en kg'}),
+            'repeticiones': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Número de repeticiones'})
+        }
 
 class ClasesForm(forms.ModelForm):
     class Meta:
@@ -114,3 +118,8 @@ class MembresiasForm(forms.ModelForm):
             'Horario1',
             'Horario2',
         ]
+
+class GrupoMuscularForm(forms.ModelForm):
+    class Meta:
+        model = GrupoMuscular
+        fields = ['nombre', 'region']

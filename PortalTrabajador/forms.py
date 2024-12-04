@@ -4,7 +4,14 @@ from PortalCMAS.models import TipoEjercicio, GrupoMuscular, MetricasEjerciciosCl
 class RegistroEntradaForm(forms.Form):
     rut = forms.CharField(
         max_length=12,
-        label="RUT",
-        widget=forms.TextInput(attrs={'placeholder': 'Ej: 12345678-9'})
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej: 12345678-9',
+            'oninput': 'formatRut(this)',
+            'required': True
+        })
     )
-
+class GrupoMuscularForm(forms.ModelForm):
+    class Meta:
+        model = GrupoMuscular
+        fields = ['nombre', 'region']

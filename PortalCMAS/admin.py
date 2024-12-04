@@ -23,7 +23,7 @@ class GrupoMuscularAdmin(admin.ModelAdmin):
 
 admin.site.register(GrupoMuscular, GrupoMuscularAdmin)
 
-class EjerciciosAdmin(admin.ModelAdmin):
+class EjercicioAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'tipo_ejercicio', 'grupo_muscular')
     search_fields = ['nombre']
     readonly_fields = ()
@@ -31,4 +31,4 @@ class EjerciciosAdmin(admin.ModelAdmin):
     list_filter = ()
     fieldsets = ()
 
-admin.site.register(Ejercicios, EjerciciosAdmin)
+admin.site.register(Ejercicios, EjercicioAdmin)

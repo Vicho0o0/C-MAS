@@ -41,10 +41,10 @@
           </ul>
           {% if user.is_authenticated %}
               <span class="navbar-text mr-2">Hola, {{ user.username }}</span>
-              <form action="{% url 'logout' %}" method="post">
+              <form action="{% url 'logout' %}" method="post" class="d-inline">
                 {% csrf_token %}
-                <button type="submit">
-                  Cerrar sesión
+                <button type="submit" class="btn btn-outline-danger">
+                    Cerrar sesión
                 </button>
               </form>
           {% else %}

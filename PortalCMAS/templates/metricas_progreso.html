@@ -1,17 +1,96 @@
 {%include 'header.html'%}
 
 <div class="container mt-5">
-    <a href="../metricas_cliente/"
-        class='btn btn-success'>
-        Progreso Cliente
-    </a>
-    <a href="../metricas_trensuperior/"
-        class='btn btn-success'>
-        Progreso Tren Superior
-    </a>
-    <a href="../metricas_treninferior/"
-        class='btn btn-success'>
-        Progreso Tren Inferior
-    </a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Mi Progreso</h2>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Registrar Métricas Personales</h4>
+                </div>
+                <div class="card-body">
+                    {% if metricas_hoy %}
+                        <div class="alert alert-warning">
+                            Ya has registrado tus métricas hoy. Solo puedes registrar una vez al día.
+                        </div>
+                    {% else %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form_metricas.as_p }}
+                            <button type="submit" name="submit_metricas" class="btn btn-primary">
+                                Guardar Métricas
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Registrar Ejercicio</h4>
+                </div>
+                <div class="card-body">
+                    {% if ejercicios_hoy %}
+                        <div class="alert alert-warning">
+                            Ya has registrado tus ejercicios hoy. Solo puedes registrar una vez al día.
+                        </div>
+                    {% else %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form_ejercicios.as_p }}
+                            <button type="submit" name="submit_ejercicios" class="btn btn-primary">
+                                Guardar Ejercicio
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Historial de Métricas</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Altura</th>
+                                    <th>Peso</th>
+                                    <th>Horas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for metrica in metricas %}
+                                    <tr>
+                                        <td>{{ metrica.fecha_marca }}</td>
+                                        <td>{{ metrica.altura }}</td>
+                                        <td>{{ metrica.peso }}</td>
+                                        <td>{{ metrica.horas }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {%include 'footer.html'%}

@@ -2,22 +2,92 @@
 {%include 'headerT.html'%}
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Area de Progreso de los clientes</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Progreso de Clientes</h2>
+        <a href="{% url 'gestion_ejercicios' %}" class="btn btn-primary">
+            <i class="bi bi-gear-fill"></i> Gestión de Ejercicios
+        </a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Métricas Generales</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>RUT</th>
+                                    <th>Altura</th>
+                                    <th>Peso</th>
+                                    <th>Horas Entrenadas</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for metrica in metricas %}
+                                <tr>
+                                    <td>{{ metrica.rut_cliente }}</td>
+                                    <td>{{ metrica.altura }} cm</td>
+                                    <td>{{ metrica.peso }} kg</td>
+                                    <td>{{ metrica.horas_entrenadas }}</td>
+                                    <td>{{ metrica.fecha_marca|date:"d/m/Y H:i" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay métricas registradas</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Métricas de Ejercicios</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>RUT</th>
+                                    <th>Ejercicio</th>
+                                    <th>Peso</th>
+                                    <th>Repeticiones</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ejercicio in ejercicios %}
+                                <tr>
+                                    <td>{{ ejercicio.rut_cliente }}</td>
+                                    <td>{{ ejercicio.nombre }}</td>
+                                    <td>{{ ejercicio.peso }} kg</td>
+                                    <td>{{ ejercicio.repeticiones }}</td>
+                                    <td>{{ ejercicio.fecha_marca|date:"d/m/Y H:i" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay ejercicios registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<center>
-<div class="container mt-5">
-    <a href="../Tipo_Ejercicio/"
-        class='btn btn-success'>
-        Gestionar Tipos de Ejercicios
-    </a>
-    <a href="../Grupo_Muscular/"
-        class='btn btn-success'>
-        Gestionar Grupos Musculares
-    </a>
-    <a href="../Ejercicios/"
-        class='btn btn-success'>
-        Gestionar Ejercicios
-    </a>
-</div>
-</center>
+
 {%include 'footerT.html'%}
