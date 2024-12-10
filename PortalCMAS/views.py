@@ -4,13 +4,18 @@ from django.contrib.auth import *
 from django.contrib import messages
 from django.conf import settings
 from .models import Schedule, Cliente, RegistroEntrada
-from PortalCMAS.models import Clases, Membresias
-from PortalCMAS.forms import *
+from PortalCMAS.models import Clases, Membresias, GrupoMuscular, Ejercicios
+from .forms import *
+
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth import authenticate, login
 from django.http.response import JsonResponse
 from random import randrange
+from django.utils.timezone import now
+from django.views.decorators.http import require_http_methods
+from .forms import RegistroEntradaForm
+from .models import Perfil, RegistroEntrada
 
 def IndexC(request):
     return render(request, 'indexC.html')
@@ -85,8 +90,56 @@ def Login_Admin(request):
             
     return render(request, 'PortalAdministrativo.html')
 
+@login_required
 def ProgresoCliente(request):
-    return render(request, 'metricas_progreso.html')
+    hoy = now().date()
+    metricas_hoy = MetricasCliente.objects.filter(
+        rut_cliente=request.user.perfil.rut,
+        fecha_marca__date=hoy
+    ).exists()
+    
+    ejercicios_hoy = MetricasEjerciciosCliente.objects.filter(
+        rut_cliente=request.user.perfil.rut,
+        fecha_marca__date=hoy
+    ).exists()
+
+    if request.method == 'POST':
+        if 'submit_metricas' in request.POST:
+            if metricas_hoy:
+                messages.warning(request, "Ya has registrado tus métricas hoy. Solo puedes registrar una vez al día.")
+                return redirect('progreso')
+            
+            form_metricas = MetricasClienteForm(request.POST)
+            if form_metricas.is_valid():
+                metrica = form_metricas.save(commit=False)
+                metrica.rut_cliente = request.user.perfil.rut
+                metrica.save()
+                messages.success(request, "Métricas guardadas exitosamente")
+                return redirect('progreso')
+                
+        elif 'submit_ejercicios' in request.POST:
+            if ejercicios_hoy:
+                messages.warning(request, "Ya has registrado tus ejercicios hoy. Solo puedes registrar una vez al día.")
+                return redirect('progreso')
+            
+            form_ejercicios = MetricasEjerciciosClienteForm(request.POST)
+            if form_ejercicios.is_valid():
+                ejercicio = form_ejercicios.save(commit=False)
+                ejercicio.rut_cliente = request.user.perfil.rut
+                ejercicio.save()
+                messages.success(request, "Ejercicio registrado exitosamente")
+                return redirect('progreso')
+
+    context = {
+        'form_metricas': MetricasClienteForm() if not metricas_hoy else None,
+        'form_ejercicios': MetricasEjerciciosClienteForm() if not ejercicios_hoy else None,
+        'metricas': MetricasCliente.objects.filter(rut_cliente=request.user.perfil.rut).order_by('-fecha_marca'),
+        'ejercicios': MetricasEjerciciosCliente.objects.filter(rut_cliente=request.user.perfil.rut).order_by('-fecha_marca'),
+        'metricas_hoy': metricas_hoy,
+        'ejercicios_hoy': ejercicios_hoy
+    }
+    
+    return render(request, 'metricas_progreso.html', context)
 
 def GraficoCliente(request):
     return render(request, 'graficos_cliente.html')
@@ -114,40 +167,6 @@ def get_chart(request):
     }
     return JsonResponse(chart)
 
-def Ver_Progreso(request):
-    metricas_ejercicios=MetricasEjerciciosCliente.objects.all()
-    perfil = get_object_or_404(Perfil, user=request.user)
-    rut_cliente = perfil.rut
-    data={
-        'rut_cliente':rut_cliente,
-        'metricas_ejercicios':metricas_ejercicios
-    }
-    return render(request, 'ver_progreso.html',data)
-
-def Metricas_Cliente(request):
-    perfil = get_object_or_404(Perfil, user=request.user)
-    rut_cliente = perfil.rut
-    form = MetricasClienteForm(initial={'rut_cliente': rut_cliente})  
-    if request.method=='POST':
-        form=MetricasClienteForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return ProgresoCliente(request)
-    data={'form':form,'titulo':'Agregar Progreso Personal'}
-    return render(request,'metricas_cliente.html',data)
-
-def Metricas_Entreno(request):
-    perfil = get_object_or_404(Perfil, user=request.user)
-    rut_cliente = perfil.rut
-    form = MetricasEjerciciosClienteForm(initial={'rut_cliente': rut_cliente})  
-    if request.method=='POST':
-        form=MetricasEjerciciosClienteForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return ProgresoCliente(request)
-    data={'form':form,'titulo':'Agregar Progreso en el Entrenamiento'}
-    return render(request,'metricas_entreno.html',data)
-
 def Comunidad(request):
     return render(request, 'comunidad.html')
 
@@ -166,3 +185,48 @@ def Contactos(request):
         )
         return render(request, 'contacto.html', {'mensaje_enviado': True})
     return render(request, 'contacto.html')
+
+def registro_entrada_view(request):
+    mensaje = None
+    form = RegistroEntradaForm()
+
+    if request.method == "POST":
+        form = RegistroEntradaForm(request.POST)
+        if form.is_valid():
+            rut = form.cleaned_data['rut']
+            try:
+                perfil = Perfil.objects.get(rut=rut)
+                hoy = now().date()
+                existe_registro = RegistroEntrada.objects.filter(
+                    perfil=perfil, 
+                    hora_entrada__date=hoy
+                ).exists()
+
+                if existe_registro:
+                    mensaje = f"El usuario {perfil.user.first_name} {perfil.user.last_name} ya registró su entrada hoy."
+                else:
+                    RegistroEntrada.objects.create(perfil=perfil, hora_entrada=now())
+                    mensaje = f"Acceso registrado para {perfil.user.first_name} {perfil.user.last_name}."
+            except Perfil.DoesNotExist:
+                mensaje = "El RUT ingresado no está registrado."
+
+    registros = RegistroEntrada.objects.all().order_by("-hora_entrada")[:10]
+
+    return render(request, "registro_entrada.html", {
+        "form": form,
+        "mensaje": mensaje, 
+        "registros": registros
+    })
+
+@login_required
+def GestionEjercicios(request):
+    tipos_ejercicio = TipoEjercicio.objects.all()
+    grupos_musculares = GrupoMuscular.objects.all()
+    ejercicios = Ejercicios.objects.all()
+    
+    context = {
+        'tipos_ejercicio': tipos_ejercicio,
+        'grupos_musculares': grupos_musculares,
+        'ejercicios': ejercicios
+    }
+    return render(request, 'gestion_ejercicios.html', context)

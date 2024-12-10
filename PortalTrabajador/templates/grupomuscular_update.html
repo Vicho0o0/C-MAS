@@ -1,0 +1,32 @@
+{% include 'headerT.html' %}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Actualizar Grupo Muscular</h2>
+        <a href="{% url 'gestion_ejercicios' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Gestión de Ejercicios
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Editar Grupo Muscular</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <a href="{% url 'gestion_ejercicios' %}" class="btn btn-secondary ms-2">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footerT.html' %} 

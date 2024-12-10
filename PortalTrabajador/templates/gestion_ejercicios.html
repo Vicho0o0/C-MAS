@@ -1,0 +1,333 @@
+{% include 'headerT.html' %}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gestión de Ejercicios</h2>
+        <a href="{% url 'progreso_trabajador' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Progreso
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Tipos de Ejercicios</h4>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTipoEjercicio">
+                        <i class="bi bi-plus-circle"></i> Nuevo Tipo
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tipo in tipos_ejercicio %}
+                                <tr>
+                                    <td>{{ tipo.nombre }}</td>
+                                    <td>{{ tipo.descripcion }}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" onclick="editarTipo('{{ tipo.id }}')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarTipo('{{ tipo.id }}')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center">No hay tipos de ejercicios registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Grupos Musculares</h4>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalGrupoMuscular">
+                        <i class="bi bi-plus-circle"></i> Nuevo Grupo
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Región</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for grupo in grupos_musculares %}
+                                <tr>
+                                    <td>{{ grupo.nombre }}</td>
+                                    <td>{{ grupo.region }}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" onclick="editarGrupo('{{ grupo.id }}')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarGrupo('{{ grupo.id }}')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center">No hay grupos musculares registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Catálogo de Ejercicios</h4>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEjercicio">
+                        <i class="bi bi-plus-circle"></i> Nuevo Ejercicio
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Grupo Muscular</th>
+                                    <th>Dificultad</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ejercicio in ejercicios %}
+                                <tr>
+                                    <td>{{ ejercicio.nombre }}</td>
+                                    <td>{{ ejercicio.tipo_ejercicio.nombre }}</td>
+                                    <td>{{ ejercicio.grupo_muscular }}</td>
+                                    <td>{{ ejercicio.dificultad }}</td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm" onclick="verDetalles('{{ ejercicio.id }}')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="editarEjercicio('{{ ejercicio.id }}')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarEjercicio('{{ ejercicio.id }}')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay ejercicios registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalTipoEjercicio" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tipo de Ejercicio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formTipoEjercicio" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="tipo" value="1">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Grupo Muscular -->
+<div class="modal fade" id="modalGrupoMuscular" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Grupo Muscular</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formGrupoMuscular" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Región</label>
+                        <select class="form-select" name="region" required>
+                            <option value="">Seleccione una región</option>
+                            <option value="superior">Superior</option>
+                            <option value="inferior">Inferior</option>
+                            <option value="core">Core</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ejercicio -->
+<div class="modal fade" id="modalEjercicio" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ejercicio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formEjercicio" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Ejercicio</label>
+                        <select class="form-select" name="tipo_ejercicio" required>
+                            <option value="">Seleccione un tipo</option>
+                            {% for tipo in tipos_ejercicio %}
+                            <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Grupo Muscular</label>
+                        <select class="form-select" name="grupo_muscular" required>
+                            <option value="">Seleccione un grupo</option>
+                            {% for grupo in grupos_musculares %}
+                            <option value="{{ grupo.id }}">{{ grupo.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dificultad</label>
+                        <select class="form-select" name="dificultad" required>
+                            <option value="">Seleccione dificultad</option>
+                            <option value="principiante">Principiante</option>
+                            <option value="intermedio">Intermedio</option>
+                            <option value="avanzado">Avanzado</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" name="descripcion" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funciones para gestionar tipos de ejercicios
+    function editarTipo(id) {
+        window.location.href = `/Portal_Trabajador/actualizar_tipo_ejercicio/${id}/`;
+    }
+
+    function eliminarTipo(id) {
+        if (confirm('¿Está seguro de eliminar este tipo de ejercicio?')) {
+            fetch(`/Portal_Trabajador/eliminar-tipo/${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    // Funciones para gestionar grupos musculares
+    function editarGrupo(id) {
+        window.location.href = `/Portal_Trabajador/actualizar_grupo_muscular/${id}/`;
+    }
+
+    function eliminarGrupo(id) {
+        if (confirm('¿Está seguro de eliminar este grupo muscular?')) {
+            fetch(`/Portal_Trabajador/eliminar-grupo/${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    // Funciones para gestionar ejercicios
+    function verDetalles(id) {
+        window.location.href = `/Portal_Trabajador/ver_ejercicio/${id}/`;
+    }
+
+    function editarEjercicio(id) {
+        window.location.href = `/Portal_Trabajador/actualizar_ejercicio/${id}/`;
+    }
+
+    function eliminarEjercicio(id) {
+        if (confirm('¿Está seguro de eliminar este ejercicio?')) {
+            fetch(`/Portal_Trabajador/eliminar-ejercicio/${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+    }
+</script>
+
+{% include 'footerT.html' %} 
