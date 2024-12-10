@@ -1,0 +1,34 @@
+{% load static %}
+{%include 'header.html'%}
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Horarios Disponibles</h2>
+        {%if metricas_ejercicios%}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Ejercicio</th>
+                    <th>Peso</th>
+                    <th>Repeticiones</th>
+                    <th>Series</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for per in metricas_ejercicios%}
+                <tr>
+                    <td>{{per.id}}</td>
+                    <td>{{per.nombre}}</td>
+                    <td>{{per.peso}}</td>
+                    <td>{{per.repeticiones}}</td>
+                    <td>{{per.series}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        {%else%}
+            <div class="alert alert-info">No Hay Registros</div>
+        {%endif%}
+    </div>
+
+{%include 'footer.html'%} 
