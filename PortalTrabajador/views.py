@@ -15,7 +15,6 @@ from django.contrib.auth import authenticate, login
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 def IndexT(request):
     return render(request, 'indexT.html')
 
@@ -293,7 +292,7 @@ def Delete_Ejercicio(request, id):
 def GestionEjercicios(request):
     tipos_ejercicio = TipoEjercicio.objects.all()
     grupos_musculares = GrupoMuscular.objects.all()
-    ejercicios = Ejercicio.objects.all()
+    ejercicios = ModeloEjercicio.objects.all()
     
     context = {
         'tipos_ejercicio': tipos_ejercicio,
@@ -301,7 +300,6 @@ def GestionEjercicios(request):
         'ejercicios': ejercicios
     }
     return render(request, 'gestion_ejercicios.html', context)
-
 def vista_gestion_ejercicios(request):
     if request.method == 'POST':
         if 'tipo' in request.POST:

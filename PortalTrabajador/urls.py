@@ -24,7 +24,7 @@ urlpatterns = [
     path('crear_ejercicio/',views.Agregar_Ejercicio),
     path('actualizar_ejercicio/<int:id>/', views.Actualizar_Ejercicio, name='actualizar_ejercicio'),
     path('delete_ejercicio/<int:id>',views.Delete_Ejercicio),
-    path('gestion_ejercicios/', views.vista_gestion_ejercicios, name='gestion_ejercicios'),
+    path('gestion_ejercicios/', views.GestionEjercicios, name='gestion_ejercicios'),
     path('actualizar_tipo_ejercicio/<int:id>/', views.Actualizar_Tipo_Ejercicio, name='actualizar_tipo_ejercicio'),
     path('actualizar_grupo_muscular/<int:id>/', views.Actualizar_Grupo_Muscular, name='actualizar_grupo_muscular'),
     path('actualizar_ejercicio/<int:id>/', views.Actualizar_Ejercicio, name='actualizar_ejercicio'),

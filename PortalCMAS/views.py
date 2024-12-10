@@ -230,3 +230,21 @@ def GestionEjercicios(request):
         'ejercicios': ejercicios
     }
     return render(request, 'gestion_ejercicios.html', context)
+
+def Actualizar_Tipo_Ejercicio(request, id):
+    tipo_ejercicio = get_object_or_404(TipoEjercicio, id=id)
+    
+    if request.method == 'POST':
+        form = FormTipoEjercicio(request.POST, instance=tipo_ejercicio)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Tipo de ejercicio actualizado exitosamente.")
+            return redirect('tipo_ejercicio')
+    else:
+        form = FormTipoEjercicio(instance=tipo_ejercicio)
+
+    context = {
+        'form': form,
+        'titulo': 'Actualizar Tipo de Ejercicio'
+    }
+    return render(request, 'tipoejercicio_save.html', context)

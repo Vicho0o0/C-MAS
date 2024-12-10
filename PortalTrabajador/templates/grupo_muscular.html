@@ -1,0 +1,44 @@
+{% load static %}
+{%include 'headerT.html'%}
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Grupos Musculares</h2>
+        {%if grupo_muscular%}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th colspan="2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tbody>
+                    {%for grupo in grupo_muscular%}
+                    <tr>
+                        <td>{{grupo.id}}</td>
+                        <td>{{grupo.nombre}}</td>
+                    <td>
+                        <a href="/Portal_Trabajador/grupomuscular_update/{{grupo.id}}"
+                          class='btn btn-warning'><i class="bi bi-pencil"></i>
+                       </a>
+                    </td>
+                    <td>
+                        <a href="/Portal_Trabajador/grupomuscular_delete/{{grupo.id}}"
+                          class='btn btn-danger'><i class="bi bi-trash"></i>
+                       </a>
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+         </table>
+        {%else%}
+            <div class="alert alert-info">No Hay Grupos musculares registrados</div>
+        {%endif%}
+        <a href="../crear_grupo_muscular/" class="btn btn-success">Crear Grupo Muscular</a>
+        <a href="../Progreso_Trabajador/" class="btn btn-secondary">Volver</a>
+    </div>
+    
+
+{%include 'footerT.html'%} 
